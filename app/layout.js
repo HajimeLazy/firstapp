@@ -31,9 +31,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={prompt.className}>
-        <Navigation />
-        {children}
-        <Footer />
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-12">
+              <Navigation />
+            </div>
+          </div>
+          {children}
+          <Footer />
+        </div>
       </body>
     </html>
   );
