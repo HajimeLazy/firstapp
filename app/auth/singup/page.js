@@ -25,7 +25,7 @@ export default function SignUpPage() {
       <h2 className="mb-4 text-center">Sign Up</h2>
       <form className="w-50 mx-auto" onSubmit={handleSubmit}>
         <div className="form-group mb-3">
-          <label htmlFor="name">Full Name</label>
+          <label htmlFor="name">Username</label>
           <input type="text" className="form-control" id="name" required />
         </div>
 
