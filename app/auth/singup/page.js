@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
-    prefix: "",
     firstName: "",
+    fullName: "",
     lastName: "",
     address: "",
     gender: "",
@@ -20,26 +21,61 @@ export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (formData.password !== formData.confirmPassword) {
       alert("Password และ Confirm Password ไม่ตรงกัน");
       return;
     }
+
     if (!formData.acceptTerms) {
       alert("กรุณายอมรับเงื่อนไข");
       return;
     }
-    alert("สมัครสมาชิกสำเร็จ");
-    // ส่งข้อมูลไป backend ตามต้องการ
+
+    try {
+      const res = await fetch("http://itdev.cmtc.ac.th:3000/api/users", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json", // สำคัญ!
+        },
+        body: JSON.stringify({
+          firstname: formData.firstname,
+          fullname: formData.fullname,
+          lastname: formData.lastName,
+          address: formData.address,
+          gender: formData.gender,
+          birthDate: formData.birthDate,
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const result = await res.json();
+      console.log(result);
+      if (res.ok) {
+        Swal.fire("สมัครสมาชิกสำเร็จ", "", "success");
+      } else {
+        Swal.fire(
+          "เกิดข้อผิดพลาด",
+          result.message || "ไม่สามารถสมัครได้",
+          "error"
+        );
+      }
+    } catch (error) {
+      Swal.fire("เกิดข้อผิดพลาด", error.message, "error");
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   return (
@@ -50,8 +86,8 @@ export default function SignUpPage() {
           <label>คำนำหน้าชื่อ</label>
           <select
             className="form-control"
-            name="prefix"
-            value={formData.prefix}
+            name="firstname"
+            value={formData.firstname}
             onChange={handleChange}
             required
           >
@@ -67,8 +103,8 @@ export default function SignUpPage() {
           <input
             type="text"
             className="form-control"
-            name="firstName"
-            value={formData.firstName}
+            name="fullname"
+            value={formData.fullname}
             onChange={handleChange}
             required
           />
@@ -80,7 +116,7 @@ export default function SignUpPage() {
             type="text"
             className="form-control"
             name="lastName"
-            value={formData.lastName}
+            value={formData.lastname}
             onChange={handleChange}
             required
           />
