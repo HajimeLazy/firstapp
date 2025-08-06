@@ -5,17 +5,18 @@ import Swal from "sweetalert2";
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
-    firstName: "",
-    fullName: "",
-    lastName: "",
-    address: "",
-    gender: "",
-    birthDate: "",
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    acceptTerms: false,
+   // เปลี่ยนชื่อ key ให้ตรงกันทั้งหมด
+  prefix: "",         // สำหรับคำนำหน้า
+  firstName: "",      // ชื่อ
+  lastName: "",       // นามสกุล
+  address: "",        // ที่อยู่
+  gender: "",         // เพศ
+  birthDate: "",      // วันเกิด
+  username: "",       // Username
+  email: "",          // Email
+  password: "",       // Password
+  confirmPassword: "",// Confirm Password
+  acceptTerms: false, // Checkbox
   });
 
   const [showPassword, setShowPassword] = useState(false);
