@@ -85,24 +85,41 @@ const handleDelete = async (id) => {
           </tr>
         </thead>
         <tbody>
-          {items.map((item) => (
-            <tr key={item.id}>
-              <td className='text-center'>{item.id}</td>
-              <td>{item.firstname}</td>
-              <td>{item.fullname}</td>
-              <td>{item.lastname}</td>
-              <td>{item.username}</td>
-              <td>{item.password}</td>
-              <td>{item.address}</td>
-              <td>{item.gender}</td>
-              <td>{item.birthday}</td>
-              <td><Link href={`/admin/users/edit/${item.id}`} className="btn btn-warning">Edit</Link></td>
-<td>
-  <button className="btn btn-pill btn-danger" type="button" onClick={() => handleDelete(item.id)}>
-    <i className="fa fa-trash"></i> Del</button></td>
-            </tr>
-          ))}
-        </tbody>
+  {items.map((item) => (
+    <tr key={item.id}>
+      <td className='text-center'>{item.id}</td>
+      <td>{item.firstname}</td>
+      <td>{item.fullname}</td>
+      <td>{item.lastname}</td>
+      <td>{item.username}</td>
+      <td>{item.password}</td>
+      <td>{item.address}</td>
+      <td>
+        {item.gender === "M" || item.gender === "1"
+          ? "ชาย"
+          : item.gender === "F" || item.gender === "0"
+          ? "หญิง"
+          : "-"}
+      </td>
+      <td>{item.birthday}</td>
+      <td>
+        <Link href={`/admin/users/edit/${item.id}`} className="btn btn-warning">
+          Edit
+        </Link>
+      </td>
+      <td>
+        <button
+          className="btn btn-pill btn-danger"
+          type="button"
+          onClick={() => handleDelete(item.id)}
+        >
+          <i className="fa fa-trash"></i> Del
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
       </table>
     </div>
     </div>
