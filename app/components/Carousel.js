@@ -1,8 +1,6 @@
 "use client";
 import { useEffect } from "react";
 
-import Image from "next/image";
-
 export default function Carousel() {
   useEffect(() => {
     import("bootstrap/dist/js/bootstrap.bundle.min.js");
@@ -12,7 +10,8 @@ export default function Carousel() {
     <div
       id="carouselExampleControls"
       className="carousel slide"
-      data-ride="carousel"
+      data-bs-ride="carousel"
+      data-bs-interval="3000"  // <-- เพิ่มตรงนี้
     >
       <div className="carousel-inner">
         <div className="carousel-item active">
@@ -43,24 +42,28 @@ export default function Carousel() {
           />
         </div>
       </div>
-      <a
+
+      {/* ปุ่ม Prev */}
+      <button
         className="carousel-control-prev"
-        href="#carouselExampleControls"
-        role="button"
-        data-slide="prev"
+        type="button"
+        data-bs-target="#carouselExampleControls"
+        data-bs-slide="prev"
       >
         <span className="carousel-control-prev-icon" aria-hidden="true" />
-        <span className="sr-only">Previous</span>
-      </a>
-      <a
+        <span className="visually-hidden">Previous</span>
+      </button>
+
+      {/* ปุ่ม Next */}
+      <button
         className="carousel-control-next"
-        href="#carouselExampleControls"
-        role="button"
-        data-slide="next"
+        type="button"
+        data-bs-target="#carouselExampleControls"
+        data-bs-slide="next"
       >
         <span className="carousel-control-next-icon" aria-hidden="true" />
-        <span className="sr-only">Next</span>
-      </a>
+        <span className="visually-hidden">Next</span>
+      </button>
     </div>
   );
 }

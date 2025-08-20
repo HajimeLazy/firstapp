@@ -5,8 +5,7 @@ import Swal from "sweetalert2";
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
-   // เปลี่ยนชื่อ key ให้ตรงกันทั้งหมด
-  prefix: "",         // สำหรับคำนำหน้า
+  prefix: "",         // คำนำหน้า
   firstName: "",      // ชื่อ
   lastName: "",       // นามสกุล
   address: "",        // ที่อยู่
@@ -17,7 +16,7 @@ export default function SignUpPage() {
   password: "",       // Password
   confirmPassword: "",// Confirm Password
   acceptTerms: false, // Checkbox
-  });
+});
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -43,16 +42,16 @@ export default function SignUpPage() {
           "Content-Type": "application/json", // สำคัญ!
         },
         body: JSON.stringify({
-          firstname: formData.firstname,
-          fullname: formData.fullname,
-          lastname: formData.lastName,
-          address: formData.address,
-          gender: formData.gender,
-          birthDate: formData.birthDate,
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-        }),
+  prefix: formData.prefix,
+  firstname: formData.firstName,
+  lastname: formData.lastName,
+  address: formData.address,
+  gender: formData.gender,
+  birthDate: formData.birthDate,
+  username: formData.username,
+  email: formData.email,
+  password: formData.password,
+}),
       });
 
       const result = await res.json();

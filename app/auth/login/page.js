@@ -1,34 +1,72 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Swal from "sweetalert2";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState(""); // เปลี่ยนจาก email → username
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleSubmit = (e) => {
+  const router = useRouter();
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    alert(
-      `Login with\nEmail: ${email}\nPassword: ${password}\nRemember me: ${rememberMe}`
-    );
-    // ส่งข้อมูลไป backend ตามต้องการ
+
+    try {
+      const res = await fetch("http://itdev.cmtc.ac.th:3000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await res.json();
+
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+
+        Swal.fire({
+          icon: "success",
+          title: "<h3>Login Successfully!</h3>",
+          showConfirmButton: false,
+          timer: 2000,
+        }).then(() => {
+          router.push("/admin/users"); // ล็อกอินสำเร็จ → ไปหน้า admin
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "<h3>Login Failed!</h3>",
+          text: data.message || "กรุณาตรวจสอบ Username/Password",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "เกิดข้อผิดพลาด",
+        text: error.message,
+      });
+    }
   };
 
   return (
     <div className="container mt-5">
       <h2 className="mb-4 text-center">Login</h2>
-      <form className="w-50 mx-auto" onSubmit={handleSubmit}>
+
+      <form className="w-50 mx-auto" onSubmit={handleLogin}>
         <div className="form-group mb-3">
-          <label htmlFor="email">Email address</label>
+          <label htmlFor="username">Username</label>
           <input
-            type="email"
+            type="text"
             className="form-control"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
         </div>
@@ -72,7 +110,7 @@ export default function LoginPage() {
         </button>
 
         <div className="text-center">
-          <Link href="/auth/singup" className="me-2">
+          <Link href="/auth/signup" className="me-2">
             สมัครสมาชิก
           </Link>
           |

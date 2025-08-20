@@ -1,12 +1,20 @@
 'use client';
 import Link from 'next/link'
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation'
 
 export default function Page() {
   const [items, setItems] = useState([]);
-
+const [loading, setLoading] = useState(true); // <-- เพิ่ม state loading
+  const router = useRouter();
 
   useEffect(() => {
+
+    const token = localStorage.getItem('token');
+     if (!token) {
+       router.push('/signin');
+       return;
+     }
 
     async function getUsers() {
       try {
@@ -17,8 +25,10 @@ export default function Page() {
         }
         const data = await res.json();
         setItems(data);
+        setLoading(false); // <-- โหลดเสร็จแล้ว
       } catch (error) {
         console.error('Error fetching data:', error);
+        setLoading(false);
       }
     }
  
@@ -42,6 +52,12 @@ const handleDelete = async (id) => {
     console.error('Error fetching data:', error);
   }
 }; //end handleDelete
+
+ // ถ้า loading ให้ return null หรือข้อความ loading
+ if (loading) {
+  return <div className='text-center'><h1>Loading...</h1></div>; // หรือ return null เพื่อไม่ให้ render อะไร
+}
+
   return (
     <>
     <br /><br /><br /><br />
@@ -64,7 +80,7 @@ const handleDelete = async (id) => {
             <th className='col-md-4'>Address</th>
             <th className='col-md-4'>Sex</th>
             <th className='col-md-4'>Birthday</th>
-            <th className='col-md-1'>Eidt</th>
+            <th className='col-md-1'>Edit</th>
             <th className='col-md-1'>Delete</th>
           </tr>
         </thead>
@@ -78,10 +94,12 @@ const handleDelete = async (id) => {
               <td>{item.username}</td>
               <td>{item.password}</td>
               <td>{item.address}</td>
-              <td>{item.sex}</td>
+              <td>{item.gender}</td>
               <td>{item.birthday}</td>
               <td><Link href={`/admin/users/edit/${item.id}`} className="btn btn-warning">Edit</Link></td>
-              <td><button className="btn btn-pill btn-danger" type="button" onClick={() => handleDelete(item.id)}><i class="fa fa-trash"></i>Del</button></td>
+<td>
+  <button className="btn btn-pill btn-danger" type="button" onClick={() => handleDelete(item.id)}>
+    <i className="fa fa-trash"></i> Del</button></td>
             </tr>
           ))}
         </tbody>
